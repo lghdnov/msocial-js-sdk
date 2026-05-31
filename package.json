@@ -32,6 +32,14 @@
     "openapi",
     "axios"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lghdnov/msocial-js-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lghdnov/msocial-js-sdk/issues"
+  },
+  "homepage": "https://github.com/lghdnov/msocial-js-sdk#readme",
   "license": "MIT",
   "peerDependencies": {
     "axios": ">=1.0.0"

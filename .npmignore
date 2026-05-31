@@ -1,0 +1,9 @@
+**/*.msw.ts
+**/*.faker.ts
+node_modules/
+*.log
+.DS_Store
+*.tgz
+orval.config.ts
+tsconfig*.json
+schema.yaml

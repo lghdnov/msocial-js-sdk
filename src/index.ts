@@ -11,5 +11,8 @@ export * from './echo/echo';
 export * from './posts/posts';
 export * from './users/users';
 
+export { createMsocialClient } from './client';
+export type { MsocialClient } from './client';
+
 export { default as axios } from 'axios';
 export type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';

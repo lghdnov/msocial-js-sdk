@@ -32,6 +32,8 @@ export const getUploadAvatarResponseMock = (overrideResponse: Partial<Extract<Us
 
 export const getGetAvatarHistoryResponseMock = (overrideResponse: Partial<Extract<AvatarDTO, object>> = {}): AvatarDTO => ({id: faker.helpers.arrayElement([faker.number.int(), undefined]), url: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), uploadedAt: faker.helpers.arrayElement([faker.date.past().toISOString().slice(0, 19) + 'Z', undefined]), active: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), ...overrideResponse})
 
+export const getGetProfileByExternalIdResponseMock = (overrideResponse: Partial<Extract<UserDTO, object>> = {}): UserDTO => ({id: faker.helpers.arrayElement([faker.number.int(), undefined]), externalId: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), personalInfo: faker.helpers.arrayElement([{birthDate: faker.helpers.arrayElement([faker.date.past().toISOString().slice(0, 10), undefined]), address: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), favoriteTrackUrl: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), status: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined])}, undefined]), createdAt: faker.helpers.arrayElement([faker.date.past().toISOString().slice(0, 19) + 'Z', undefined]), ...overrideResponse})
+
 
 export const getGetProfileMockHandler = (overrideResponse?: UserDTO | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDTO> | UserDTO), options?: RequestHandlerOptions) => {
   return http.get('*/api/v1/users/profile', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
@@ -92,9 +94,22 @@ export const getGetAvatarHistoryMockHandler = (overrideResponse?: AvatarDTO | ((
       })
   }, options)
 }
+
+export const getGetProfileByExternalIdMockHandler = (overrideResponse?: UserDTO | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDTO> | UserDTO), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/users/by-external-id/:externalId', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getGetProfileByExternalIdResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
 export const getUsersMock = () => [
   getGetProfileMockHandler(),
   getUpdateProfileMockHandler(),
   getUploadTrackMockHandler(),
   getUploadAvatarMockHandler(),
-  getGetAvatarHistoryMockHandler()]
+  getGetAvatarHistoryMockHandler(),
+  getGetProfileByExternalIdMockHandler()]

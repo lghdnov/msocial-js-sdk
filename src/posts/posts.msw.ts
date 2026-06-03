@@ -34,6 +34,8 @@ export const getAddPostMediaResponseMock = (overrideResponse: Partial<Extract<Po
 
 export const getGetFeedResponseMock = (overrideResponse: Partial<Extract<Page, object>> = {}): Page => ({totalElements: faker.helpers.arrayElement([faker.number.int(), undefined]), totalPages: faker.helpers.arrayElement([faker.number.int(), undefined]), first: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), last: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), numberOfElements: faker.helpers.arrayElement([faker.number.int(), undefined]), pageable: faker.helpers.arrayElement([{paged: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), pageNumber: faker.helpers.arrayElement([faker.number.int(), undefined]), pageSize: faker.helpers.arrayElement([faker.number.int(), undefined]), sort: faker.helpers.arrayElement([{sorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), unsorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined])}, undefined]), unpaged: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), offset: faker.helpers.arrayElement([faker.number.int(), undefined])}, undefined]), sort: faker.helpers.arrayElement([{sorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), unsorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined])}, undefined]), size: faker.helpers.arrayElement([faker.number.int(), undefined]), content: faker.helpers.arrayElement([Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({})), undefined]), number: faker.helpers.arrayElement([faker.number.int(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), ...overrideResponse})
 
+export const getGetFeedByExternalIdResponseMock = (overrideResponse: Partial<Extract<Page, object>> = {}): Page => ({totalElements: faker.helpers.arrayElement([faker.number.int(), undefined]), totalPages: faker.helpers.arrayElement([faker.number.int(), undefined]), first: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), last: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), numberOfElements: faker.helpers.arrayElement([faker.number.int(), undefined]), pageable: faker.helpers.arrayElement([{paged: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), pageNumber: faker.helpers.arrayElement([faker.number.int(), undefined]), pageSize: faker.helpers.arrayElement([faker.number.int(), undefined]), sort: faker.helpers.arrayElement([{sorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), unsorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined])}, undefined]), unpaged: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), offset: faker.helpers.arrayElement([faker.number.int(), undefined])}, undefined]), sort: faker.helpers.arrayElement([{sorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), unsorted: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined])}, undefined]), size: faker.helpers.arrayElement([faker.number.int(), undefined]), content: faker.helpers.arrayElement([Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({})), undefined]), number: faker.helpers.arrayElement([faker.number.int(), undefined]), empty: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), ...overrideResponse})
+
 
 export const getGetPostMockHandler = (overrideResponse?: PostDTO | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<PostDTO> | PostDTO), options?: RequestHandlerOptions) => {
   return http.get('*/api/v1/posts/:postId', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
@@ -117,6 +119,18 @@ export const getGetFeedMockHandler = (overrideResponse?: Page | ((info: Paramete
   }, options)
 }
 
+export const getGetFeedByExternalIdMockHandler = (overrideResponse?: Page | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Page> | Page), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/users/by-external-id/:externalId/posts', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getGetFeedByExternalIdResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
+
 export const getDeletePostMediaMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
   return http.delete('*/api/v1/posts/:postId/media/:mediaId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
@@ -134,4 +148,5 @@ export const getPostsMock = () => [
   getPublishPostMockHandler(),
   getAddPostMediaMockHandler(),
   getGetFeedMockHandler(),
+  getGetFeedByExternalIdMockHandler(),
   getDeletePostMediaMockHandler()]

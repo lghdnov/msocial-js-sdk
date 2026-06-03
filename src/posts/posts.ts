@@ -104,6 +104,16 @@ const getFeed = (
     );
   }
 /**
+ * @summary Получить ленту постов пользователя по externalId
+ */
+const getFeedByExternalId = (
+    externalId: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Page>> => {
+    return axiosInstance.get(
+      `/api/v1/users/by-external-id/${externalId}/posts`,options
+    );
+  }
+/**
  * @summary Удалить медиафайл из поста
  */
 const deletePostMedia = (
@@ -114,7 +124,7 @@ const deletePostMedia = (
       `/api/v1/posts/${postId}/media/${mediaId}`,options
     );
   }
-return {getPost,updatePost,deletePost,createPost,publishPost,addPostMedia,getFeed,deletePostMedia}};
+return {getPost,updatePost,deletePost,createPost,publishPost,addPostMedia,getFeed,getFeedByExternalId,deletePostMedia}};
 export type GetPostResult = AxiosResponse<PostDTO>
 export type UpdatePostResult = AxiosResponse<PostDTO>
 export type DeletePostResult = AxiosResponse<void>
@@ -122,4 +132,5 @@ export type CreatePostResult = AxiosResponse<PostDTO>
 export type PublishPostResult = AxiosResponse<PostDTO>
 export type AddPostMediaResult = AxiosResponse<PostDTO>
 export type GetFeedResult = AxiosResponse<Page>
+export type GetFeedByExternalIdResult = AxiosResponse<Page>
 export type DeletePostMediaResult = AxiosResponse<void>

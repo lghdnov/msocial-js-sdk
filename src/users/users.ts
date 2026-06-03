@@ -84,9 +84,20 @@ const getAvatarHistory = (
       `/api/v1/users/profile/avatars`,options
     );
   }
-return {getProfile,updateProfile,uploadTrack,uploadAvatar,getAvatarHistory}};
+/**
+ * @summary Получить профиль пользователя по externalId
+ */
+const getProfileByExternalId = (
+    externalId: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<UserDTO>> => {
+    return axiosInstance.get(
+      `/api/v1/users/by-external-id/${externalId}`,options
+    );
+  }
+return {getProfile,updateProfile,uploadTrack,uploadAvatar,getAvatarHistory,getProfileByExternalId}};
 export type GetProfileResult = AxiosResponse<UserDTO>
 export type UpdateProfileResult = AxiosResponse<UserDTO>
 export type UploadTrackResult = AxiosResponse<UserDTO>
 export type UploadAvatarResult = AxiosResponse<UserDTO>
 export type GetAvatarHistoryResult = AxiosResponse<AvatarDTO>
+export type GetProfileByExternalIdResult = AxiosResponse<UserDTO>
